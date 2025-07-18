@@ -42,7 +42,7 @@
     "*.json": "prettier --write",
     "*.md": "prettier --write",
     ".github/workflows/*.yml": "prettier --write",
-    "**/*.{js,ts,tsx}": [
+    "codex-cli/**/*.{js,ts,tsx}": [
       "prettier --write",
       "pnpm --filter @openai/codex run lint",
       "cd codex-cli && pnpm run typecheck"
