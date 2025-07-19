@@ -1,4 +1,9 @@
-export function simulateAIs(content) {
+export interface Suggestion {
+  name: string;
+  suggestion: string;
+}
+
+export function simulateAIs(content: string): Suggestion[] {
   // This is a placeholder for AI suggestions.
   return [
     { name: 'Grok 4', suggestion: 'Humorous tweak to: ' + content.slice(0, 20) },
