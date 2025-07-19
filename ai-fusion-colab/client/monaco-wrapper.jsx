@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import * as monaco from 'monaco-editor';
 
-export default function Editor({ value, onChange }) {
+const Editor = forwardRef(function Editor({ value, onChange }, refHandle) {
   const ref = useRef(null);
   const editorRef = useRef(null);
 
@@ -23,5 +23,21 @@ export default function Editor({ value, onChange }) {
     }
   }, [value]);
 
+  useImperativeHandle(refHandle, () => ({
+    insertText(text) {
+      const editor = editorRef.current;
+      const pos = editor.getPosition();
+      editor.executeEdits('', [
+        {
+          range: new monaco.Range(pos.lineNumber, pos.column, pos.lineNumber, pos.column),
+          text
+        }
+      ]);
+      editor.focus();
+    }
+  }));
+
   return <div ref={ref} style={{ height: '100%' }} />;
-}
+});
+
+export default Editor;
