@@ -4,7 +4,7 @@ This is a minimal full-stack example using React, Socket.io and Node.js to simul
 
 ## Setup
 
-1. From the `server` directory:
+1. From the `server` directory (TypeScript):
    ```bash
    npm install
    npm start
@@ -15,7 +15,8 @@ This is a minimal full-stack example using React, Socket.io and Node.js to simul
    npm start
    ```
 
-Create a `.env` file in `server` based on `.env.example`.
+Create a `.env` file in `server` based on `.env.example` to configure `PORT`,
+`JWT_SECRET` and future AI keys like `GEMINI_API_KEY`.
 
 ## Deployment
 
