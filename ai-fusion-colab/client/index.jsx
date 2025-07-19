@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { io } from 'socket.io-client';
 import Editor from './monaco-wrapper.jsx';
-import Suggestions from './Suggestions.jsx';
+import SuggestionPanel from './SuggestionPanel.jsx';
 
 const socket = io('http://localhost:3001', {
   auth: { token: localStorage.getItem('token') }
@@ -11,11 +11,16 @@ const socket = io('http://localhost:3001', {
 function App() {
   const [content, setContent] = useState('');
   const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const editorRef = useRef(null);
 
   useEffect(() => {
     socket.emit('join', 'default');
     socket.on('document', setContent);
-    socket.on('ai-suggestions', setSuggestions);
+    socket.on('ai-suggestions', suggs => {
+      setSuggestions(suggs);
+      setLoading(false);
+    });
     return () => {
       socket.off('document');
       socket.off('ai-suggestions');
@@ -24,15 +29,20 @@ function App() {
 
   const onChange = value => {
     setContent(value);
+    setLoading(true);
     socket.emit('edit', { docId: 'default', content: value });
   };
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
       <div style={{ flex: 1 }}>
-        <Editor value={content} onChange={onChange} />
+        <Editor ref={editorRef} value={content} onChange={onChange} />
       </div>
-      <Suggestions items={suggestions} />
+      <SuggestionPanel
+        items={suggestions}
+        loading={loading}
+        onSelect={text => editorRef.current.insertText(text)}
+      />
     </div>
   );
 }

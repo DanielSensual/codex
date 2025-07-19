@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
@@ -55,10 +56,10 @@ io.on('connection', (socket) => {
     socket.emit('document', documents.get(docId));
   });
 
-  socket.on('edit', ({ docId, content }) => {
+  socket.on('edit', async ({ docId, content }) => {
     documents.set(docId, content);
     socket.to(docId).emit('document', content);
-    const suggestions = simulateAIs(content);
+    const suggestions = await simulateAIs(content);
     io.to(docId).emit('ai-suggestions', suggestions);
   });
 });
