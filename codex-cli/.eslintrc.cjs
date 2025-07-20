@@ -12,6 +12,7 @@ module.exports = {
     "dist",
     "vite.config.ts",
     "src/components/vendor",
+    "../ai-fusion-colab/**",
   ],
   parser: "@typescript-eslint/parser",
   parserOptions: {
